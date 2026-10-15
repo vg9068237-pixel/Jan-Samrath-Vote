@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#123d83">
+  <meta name="description" content="Jan Samarth Vote — राजस्थान के चुनावों और सार्वजनिक मुद्दों पर अनौपचारिक जनमत सर्वे।">
+  <title>Jan Samarth Vote | जन समर्थन वोट</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="./" aria-label="Jan Samarth Vote home">
+    <span class="brand-mark">🗳️</span><span><b>जन समर्थन वोट</b><small>Jan Samarth Vote · आपकी राय, आपकी आवाज़</small></span>
+  </a>
+  <button id="menuBtn" class="menu-btn" aria-label="मेन्यू खोलें">☰</button>
+  <nav id="nav">
+    <a href="#home">होम / Home</a><a href="#polls">पोल / Polls</a><a href="#create">पोल बनाएँ / Create</a><a href="#about">हमारे बारे में / About</a>
+  </nav>
+</header>
+<main id="home">
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">RAJASTHAN · PUBLIC OPINION</span>
+      <h1>आपकी राय,<br><em>लोकतंत्र की ताकत</em></h1>
+      <p>राजस्थान के चुनावों और स्थानीय मुद्दों पर अपनी राय साझा करें। पोल के नतीजे केवल वेबसाइट के पाठकों की राय दर्शाते हैं।</p>
+      <a class="button primary" href="#polls">पोल देखें / Explore polls</a>
+    </div>
+    <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="fort">🏛️</div><div class="vote-icon">☝️</div><div class="art-label">जनमत · Public Opinion</div></div>
+  </section>
+
+  <section class="quick-links" aria-label="मुख्य सुविधाएँ">
+    <a href="#polls"><span>📊</span><b>ताज़ा पोल</b><small>Latest polls</small></a>
+    <a href="#create"><span>✍️</span><b>पोल बनाएँ</b><small>Create a poll</small></a>
+    <a href="#about"><span>ℹ️</span><b>वोटर गाइड</b><small>Voter information</small></a>
+  </section>
+
+  <section id="polls" class="section">
+    <div class="section-head"><div><span class="eyebrow">HAVE YOUR SAY</span><h2>जनमत पोल <span>/ Public polls</span></h2></div>
+      <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="पोल खोजें / Search polls"></label>
+    </div>
+    <div class="notice"><strong>ध्यान दें / Please note:</strong> ये अनौपचारिक जनमत सर्वे हैं। परिणाम आधिकारिक चुनाव परिणाम, एग्जिट पोल या वैज्ञानिक रूप से प्रतिनिधि सर्वे नहीं हैं। / These are informal opinion polls, not official election results or representative surveys.</div>
+    <div id="pollGrid" class="poll-grid"></div>
+  </section>
+
+  <section id="create" class="section create-section">
+    <div class="section-head"><div><span class="eyebrow">YOUR QUESTION, YOUR POLL</span><h2>नया पोल बनाएँ <span>/ Create a poll</span></h2></div></div>
+    <div class="create-card">
+      <p class="muted">इस शुरुआती संस्करण में नया पोल इसी ब्राउज़र में डेमो के रूप में सेव होगा। सभी उपयोगकर्ताओं के बीच पोल साझा करने के लिए नीचे दिए गए Supabase सेटअप की जरूरत है।</p>
+      <form id="createForm">
+        <label>पोल का सवाल / Poll question<input id="pollQuestion" required maxlength="140" placeholder="उदाहरण: आपके क्षेत्र की सबसे बड़ी प्राथमिकता क्या है?"></label>
+        <label>श्रेणी / Category<select id="pollCategory"><option>राजस्थान / Rajasthan</option><option>स्थानीय मुद्दे / Local issues</option><option>जनमत / Public opinion</option></select></label>
+        <label>विकल्प / Options <small>(कम से कम 2, अधिकतम 6)</small>
+          <input class="poll-option" required maxlength="80" placeholder="विकल्प 1">
+          <input class="poll-option" required maxlength="80" placeholder="विकल्प 2">
+          <input class="poll-option" maxlength="80" placeholder="विकल्प 3 (वैकल्पिक)">
+          <input class="poll-option" maxlength="80" placeholder="विकल्प 4 (वैकल्पिक)">
+          <input class="poll-option" maxlength="80" placeholder="विकल्प 5 (वैकल्पिक)">
+          <input class="poll-option" maxlength="80" placeholder="विकल्प 6 (वैकल्पिक)">
+        </label>
+        <button class="button primary" type="submit">पोल बनाएँ / Create poll</button>
+        <p id="createMessage" class="form-message" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <section id="about" class="section about-grid">
+    <div><span class="eyebrow">ABOUT THIS SITE</span><h2>जन समर्थन वोट क्या है?</h2><p>Jan Samarth Vote एक स्वतंत्र जनमत-पोल वेबसाइट का प्रारूप है। इसका भारत निर्वाचन आयोग या राजस्थान राज्य निर्वाचन आयोग से कोई आधिकारिक संबंध नहीं है।</p></div>
+    <div class="about-box"><h3>जिम्मेदार भागीदारी</h3><p>उम्मीदवारों या दलों के बारे में अपुष्ट आरोप न डालें। किसी भी सर्वे को आधिकारिक मतदान न समझें। चुनाव की तारीखों और नतीजों के लिए आधिकारिक स्रोत देखें।</p><a href="https://election.rajasthan.gov.in/" target="_blank" rel="noopener">राजस्थान निर्वाचन विभाग ↗</a><br><a href="https://www.eci.gov.in/" target="_blank" rel="noopener">भारत निर्वाचन आयोग ↗</a></div>
+  </section>
+</main>
+<footer><a class="footer-brand" href="./">🗳️ Jan Samarth Vote</a><p>स्वतंत्र जनमत मंच · Independent opinion platform</p><p>यह वेबसाइट आधिकारिक सरकारी मतदान सेवा नहीं है। / Not an official election service.</p><small>© <span id="year"></span> Jan Samarth Vote</small></footer>
+
+<dialog id="voteDialog">
+  <form method="dialog" class="dialog-head"><div><span class="eyebrow">CAST YOUR OPINION</span><h2 id="dialogQuestion">पोल</h2></div><button class="close-btn" aria-label="बंद करें">×</button></form>
+  <div id="dialogBody"></div>
+</dialog>
+<script src="app.js"></script>
+</body>
+</html>
