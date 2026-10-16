@@ -29,7 +29,7 @@ h2{font-size:20px;margin:0 0 12px}label{display:block;font-weight:650;margin:10p
 <form id="createForm">
 <label for="question">पोल का सवाल</label><textarea id="question" required minlength="5" maxlength="240" placeholder="उदाहरण: हमारे क्षेत्र में सबसे ज़रूरी सुविधा कौन-सी है?"></textarea>
 <div class="grid"><div><label for="category">श्रेणी</label><select id="category"><option>स्थानीय विकास</option><option>शिक्षा</option><option>स्वास्थ्य</option><option>सड़क और परिवहन</option><option>पानी और सफाई</option><option>कृषि</option><option>मनोरंजन</option><option>अन्य</option></select></div><div><label for="duration">पोल की अवधि</label><select id="duration"><option value="1">1 दिन</option><option value="3">3 दिन</option><option value="7" selected>7 दिन</option><option value="30">30 दिन</option></select></div></div>
-<h3>क्षेत्र चुनें</h3><div class="grid"><div><label for="state">राज्य</label><input id="state" maxlength="80" placeholder="जैसे राजस्थान" required></div><div><label for="district">जिला</label><input id="district" maxlength="80" placeholder="जैसे जोधपुर" required></div><div><label for="subdistrict">तहसील / ब्लॉक</label><input id="subdistrict" maxlength="80" placeholder="वैकल्पिक"></div><div><label for="locality">गाँव / शहर / वार्ड</label><input id="locality" maxlength="100" placeholder="वैकल्पिक"></div></div>
+<h3>क्षेत्र चुनें</h3><p class="muted">लोकेशन की अनुमति देकर राज्य/जिला अपने-आप भरवाएँ।</p><button type="button" class="secondary" id="detectArea">📍 मेरी लोकेशन से क्षेत्र भरें</button><div id="geoStatus" class="muted" role="status"></div><div class="grid"><div><label for="state">राज्य</label><input id="state" maxlength="80" placeholder="जैसे राजस्थान" required></div><div><label for="district">जिला</label><input id="district" maxlength="80" placeholder="जैसे जोधपुर" required></div><div><label for="subdistrict">तहसील / ब्लॉक</label><input id="subdistrict" maxlength="80" placeholder="वैकल्पिक"></div><div><label for="locality">गाँव / शहर / वार्ड</label><input id="locality" maxlength="100" placeholder="वैकल्पिक"></div></div>
 <label>विकल्प (कम-से-कम 2, अधिकतम 8)</label>
 <div id="optionsBox"><input class="pollOption" required maxlength="100" placeholder="विकल्प 1"><input class="pollOption" required maxlength="100" placeholder="विकल्प 2" style="margin-top:8px"></div>
 <div class="row"><button type="button" class="secondary" id="addOption">＋ विकल्प जोड़ें</button><button type="submit" id="createBtn">पोल प्रकाशित करें</button></div>
@@ -40,6 +40,12 @@ h2{font-size:20px;margin:0 0 12px}label{display:block;font-weight:650;margin:10p
 <label for="search">सवाल / विकल्प खोजें</label><input id="search" placeholder="जैसे सड़क, पानी, शिक्षा…">
 <div class="filters"><div><label for="filterState">राज्य</label><input id="filterState" placeholder="सभी राज्य"></div><div><label for="filterDistrict">जिला</label><input id="filterDistrict" placeholder="सभी जिले"></div></div>
 <div class="row"><button class="secondary" id="applyFilters">फ़िल्टर लागू करें</button><button class="secondary" id="clearFilters">फ़िल्टर हटाएँ</button></div>
+</section>
+<section class="card" id="adsCard">
+<h2>📢 विज्ञापन (Ads)</h2>
+<p class="muted">अपना विज्ञापन नेटवर्क कोड यहाँ पेस्ट करें। यह सेटिंग केवल इसी ब्राउज़र में सेव होगी, सभी visitors के लिए नहीं।</p>
+<label for="adCode">विज्ञापन कोड</label><textarea id="adCode" placeholder="Ad network का HTML/JavaScript code यहाँ पेस्ट करें"></textarea>
+<div class="row"><button id="saveAd" type="button">विज्ञापन सेव करें</button><button id="removeAd" type="button" class="secondary">विज्ञापन हटाएँ</button></div><div id="adMessage" class="muted"></div><div id="adPreview" style="margin-top:12px;overflow:hidden"></div>
 </section>
 <section id="polls"><div class="empty">पोल लोड हो रहे हैं…</div></section>
 </main>
@@ -87,6 +93,33 @@ $('createForm').addEventListener('submit',async e=>{
  }catch(err){console.error(err);alert('पोल प्रकाशित नहीं हुआ: '+(err.code||err.message));}
  finally{$('createBtn').disabled=false;}
 });
+
+$('detectArea').addEventListener('click',()=>{
+ const out=$('geoStatus');
+ if(!navigator.geolocation){out.textContent='लोकेशन उपलब्ध नहीं। राज्य और जिला हाथ से भरें।';return;}
+ out.textContent='लोकेशन अनुमति माँगी जा रही है…';
+ navigator.geolocation.getCurrentPosition(async pos=>{
+  try{
+   const url=`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(pos.coords.latitude)}&lon=${encodeURIComponent(pos.coords.longitude)}&zoom=10&addressdetails=1`;
+   const res=await fetch(url);if(!res.ok)throw new Error('lookup failed');
+   const data=await res.json(),a=data.address||{};
+   const state=a.state||a.region||'',district=a.state_district||a.district||a.county||a.city_district||a.city||a.town||'',locality=a.village||a.town||a.city||a.suburb||'';
+   if(state)$('state').value=state;if(district)$('district').value=district;if(locality&&!$('locality').value)$('locality').value=locality;
+   out.textContent=(state||district)?`क्षेत्र भरा गया: ${[locality,district,state].filter(Boolean).join(', ')}। कृपया जाँच लें।`:'क्षेत्र नहीं मिला; हाथ से भरें।';
+  }catch(e){out.textContent='ऑटो क्षेत्र नहीं मिला। कृपया हाथ से भरें.'}
+ },err=>{out.textContent=err.code===1?'लोकेशन अनुमति नहीं मिली। कृपया हाथ से भरें।':'लोकेशन उपलब्ध नहीं; हाथ से भरें।'},{timeout:12000,maximumAge:600000});
+});
+function renderAd(){
+ const code=localStorage.getItem('jsv_ad_code')||'';$('adCode').value=code;$('adPreview').innerHTML='';
+ if(!code){$('adPreview').innerHTML='<span class="muted">अभी विज्ञापन सेट नहीं है।</span>';return;}
+ const frame=document.createElement('iframe');frame.title='विज्ञापन पूर्वावलोकन';frame.style='width:100%;min-height:120px;border:1px dashed #cbdacf;background:white';
+ frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups');
+ frame.srcdoc='<!doctype html><html><body style="margin:0;padding:8px;font-family:system-ui">'+code+'</body></html>';$('adPreview').appendChild(frame);
+}
+$('saveAd').onclick=()=>{const code=$('adCode').value.trim();if(code.length>20000)return alert('कोड बहुत बड़ा है।');if(code)localStorage.setItem('jsv_ad_code',code);else localStorage.removeItem('jsv_ad_code');$('adMessage').textContent='सेटिंग इसी ब्राउज़र में सेव हुई।';renderAd()};
+$('removeAd').onclick=()=>{localStorage.removeItem('jsv_ad_code');$('adCode').value='';$('adMessage').textContent='विज्ञापन हटाया गया।';renderAd()};
+renderAd();
+
 onAuthStateChanged(auth,user=>{currentUser=user;if(user)status('कनेक्टेड • पोल बना सकते हैं और वोट दे सकते हैं।')});
 signInAnonymously(auth).catch(err=>{console.error(err);status('Login error: Firebase Console में Anonymous Authentication चालू करें।')});
 onSnapshot(query(collection(db,'polls'),orderBy('createdAt','desc')),snap=>{
