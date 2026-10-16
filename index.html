@@ -1,33 +1,128 @@
 <!doctype html>
-<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#087443"><title>JAN SAMARTH VOTE</title>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#087443">
+<title>JAN SAMARTH VOTE | जनमत सर्वे</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f4f8f5;color:#193428;font-family:system-ui,Arial}header{background:#087443;color:white;text-align:center;padding:22px 12px}header h1{margin:0}main{max-width:820px;margin:16px auto;padding:0 12px}.card{background:white;border:1px solid #d6e5da;border-radius:14px;padding:16px;margin:14px 0}.notice{background:#fff6d9;padding:12px;border-radius:10px;font-size:13px}label{display:block;margin:9px 0 5px;font-weight:600}input,textarea,select,button{font:inherit}input,textarea,select{width:100%;padding:10px;border:1px solid #b8cabe;border-radius:8px}button{background:#087443;color:white;border:0;border-radius:8px;padding:11px 14px;font-weight:700;margin:5px 5px 5px 0}.secondary{background:#e7f2e9;color:#087443}.status{padding:10px;background:#e7f3e9;border-radius:8px;margin:12px 0}.error{background:#ffe8e8;color:#8d2020}.option{display:flex;gap:8px;align-items:center;background:#eef7f0;padding:9px;border-radius:8px;margin:7px 0}.option input{width:auto}.bar{height:9px;background:#e5ece6;border-radius:10px;overflow:hidden}.bar span{display:block;height:100%;background:#078348}.small{font-size:13px;color:#5b6c61}.meta{font-size:13px;color:#5b6c61}.result{margin:9px 0}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:500px){.row{grid-template-columns:1fr}}
-</style></head><body>
-<header><h1>JAN SAMARTH VOTE</h1><div>जनमत जानें • पोल बनाएँ • लाइव परिणाम देखें</div></header>
-<main>
-<div class="notice"><b>जरूरी:</b> यह अनौपचारिक जनमत पोल है, सरकारी चुनाव प्रणाली नहीं। Anonymous login से कोई व्यक्ति नया browser/device इस्तेमाल करके दूसरी पहचान बना सकता है। लाइव नतीजों के लिए वोट विकल्प रिकॉर्ड सार्वजनिक पढ़े जा सकते हैं; निजी या संवेदनशील वोटिंग के लिए इसका इस्तेमाल न करें।</div>
-<div id="status" class="status">Firebase से जुड़ रहे हैं…</div>
-<section class="card"><h2>नया पोल बनाएँ</h2><form id="form">
-<label>पोल का सवाल</label><textarea id="question" maxlength="240" required placeholder="आपकी राय में…"></textarea>
-<div class="row"><div><label>श्रेणी</label><select id="category"><option>जनमत</option><option>शिक्षा</option><option>स्थानीय मुद्दे</option><option>मनोरंजन</option><option>अन्य</option></select></div><div><label>पोल की अवधि</label><select id="days"><option value="1">1 दिन</option><option value="7" selected>7 दिन</option><option value="30">30 दिन</option></select></div></div>
-<label>विकल्प (कम से कम 2)</label><input class="opt" maxlength="100" required placeholder="विकल्प 1"><input class="opt" maxlength="100" required style="margin-top:8px" placeholder="विकल्प 2"><div id="more"></div>
-<button type="button" id="add" class="secondary">+ विकल्प जोड़ें</button><button id="publish">पोल प्रकाशित करें</button></form></section>
-<section class="card"><h2>लाइव पोल</h2><div id="polls">लोड हो रहा है…</div></section>
-</main><script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,signInAnonymously,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,collection,addDoc,doc,getDoc,setDoc,onSnapshot,query,orderBy} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyCOBDTm2jnRrWRw1IRH_s5qinFd72-cZIU",authDomain:"jan-samarth-vote-c6bd1.firebaseapp.com",projectId:"jan-samarth-vote-c6bd1",storageBucket:"jan-samarth-vote-c6bd1.firebasestorage.app",messagingSenderId:"312185245742",appId:"1:312185245742:web:a121c678434728311f4fbf"};
-const status=document.getElementById('status'),pollsEl=document.getElementById('polls');let db,auth,user=null,polls=[],voteData={},voteUnsubs={};
-const key=id=>'jsv_voted_'+id;
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function msg(s,err=false){status.textContent=s;status.className='status'+(err?' error':'')}
-function friendly(e){if(e?.code==='permission-denied')return 'Firebase Rules गलत हैं या Publish नहीं हुए।';if(e?.code==='auth/operation-not-allowed')return 'Firebase Authentication में Anonymous provider चालू करें।';return e?.message||'इंटरनेट/Firebase सेटिंग जाँचें।'}
-document.getElementById('add').onclick=()=>{let n=document.querySelectorAll('.opt').length;if(n>=8)return alert('अधिकतम 8 विकल्प।');let x=document.createElement('input');x.className='opt';x.maxLength=100;x.placeholder='विकल्प '+(n+1);x.style.marginTop='8px';document.getElementById('more').appendChild(x)};
-document.getElementById('form').onsubmit=async e=>{e.preventDefault();if(!user)return alert('Firebase तैयार नहीं है।');let q=document.getElementById('question').value.trim(),opts=[...document.querySelectorAll('.opt')].map(x=>x.value.trim()).filter(Boolean);if(q.length<5||opts.length<2)return alert('सवाल कम से कम 5 अक्षर और कम से कम 2 विकल्प भरें।');if(opts.length>8||new Set(opts.map(x=>x.toLowerCase())).size!==opts.length)return alert('अधिकतम 8 अलग-अलग विकल्प रखें।');let b=document.getElementById('publish');b.disabled=true;try{let now=Date.now();await addDoc(collection(db,'polls'),{question:q,category:document.getElementById('category').value,options:opts,createdAt:now,expiresAt:now+Number(document.getElementById('days').value)*86400000,ownerUid:user.uid,status:'published'});e.target.reset();document.getElementById('more').innerHTML='';document.querySelectorAll('.opt').forEach((x,i)=>{if(i>1)x.remove()});msg('पोल प्रकाशित हो गया।')}catch(err){alert('पोल नहीं बना: '+friendly(err))}finally{b.disabled=false}};
-function listenVotes(p){if(voteUnsubs[p.id])return;voteUnsubs[p.id]=onSnapshot(collection(db,'polls',p.id,'votes'),s=>{let counts=Array(p.options.length).fill(0);s.forEach(d=>{let i=d.data().optionIndex;if(Number.isInteger(i)&&i>=0&&i<counts.length)counts[i]++});voteData[p.id]={counts,total:s.size};render()},e=>{console.error(e);voteData[p.id]={counts:Array(p.options.length).fill(0),total:0,error:true};render()})}
-function render(){if(!polls.length){pollsEl.innerHTML='<p>अभी कोई पोल नहीं है। ऊपर से पहला पोल बनाएँ।</p>';return}pollsEl.innerHTML=polls.map(p=>{let d=voteData[p.id]||{counts:Array(p.options.length).fill(0),total:0},expired=Date.now()>p.expiresAt,done=localStorage.getItem(key(p.id))==='1',disabled=expired||done||d.error;let choices=p.options.map((o,i)=>`<label class="option"><input type="radio" name="c-${p.id}" value="${i}" ${disabled?'disabled':''}><span>${esc(o)}</span></label>`).join('');let results=p.options.map((o,i)=>{let n=d.counts[i]||0,pct=d.total?Math.round(n/d.total*100):0;return `<div class="result"><div>${esc(o)} — <b>${n} (${pct}%)</b></div><div class="bar"><span style="width:${pct}%"></span></div></div>`}).join('');return `<article class="card"><h2>${esc(p.question)}</h2><div class="meta">${esc(p.category||'जनमत')} • ${d.total} वोट • ${expired?'वोटिंग बंद':'अंतिम समय: '+new Date(p.expiresAt).toLocaleString('hi-IN')}</div>${choices}<button ${disabled?'disabled':''} onclick="window.vote('${p.id}')">वोट दें</button><button class="secondary" onclick="window.share('${p.id}')">WhatsApp पर शेयर</button>${d.error?'<p class="small">परिणाम लोड नहीं हुए; Rules जाँचें।</p>':done?'<p class="small">इस ब्राउज़र से वोट दर्ज हो चुका है।</p>':''}<h3>लाइव परिणाम</h3>${results}</article>`}).join('')}
-window.vote=async id=>{let p=polls.find(x=>x.id===id);if(!p||!user)return;if(Date.now()>p.expiresAt)return alert('वोटिंग बंद हो चुकी है।');if(localStorage.getItem(key(id))==='1')return alert('इस ब्राउज़र से वोट दर्ज हो चुका है।');let selected=document.querySelector(`input[name="c-${id}"]:checked`);if(!selected)return alert('पहले एक विकल्प चुनें।');try{let ref=doc(db,'polls',id,'votes',user.uid),old=await getDoc(ref);if(old.exists()){localStorage.setItem(key(id),'1');render();return alert('आपका वोट पहले से दर्ज है।')}await setDoc(ref,{optionIndex:Number(selected.value),createdAt:Date.now()});localStorage.setItem(key(id),'1');render();alert('वोट दर्ज हो गया।')}catch(e){console.error(e);alert('वोट दर्ज नहीं हुआ: '+friendly(e))}};
-window.share=id=>{let p=polls.find(x=>x.id===id),url=location.origin+location.pathname+'?poll='+encodeURIComponent(id),text='JAN SAMARTH VOTE पर अपनी राय दें: '+(p?.question||'')+'\n'+url;location.href='https://wa.me/?text='+encodeURIComponent(text)};
-async function start(){try{let app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);await signInAnonymously(auth);onAuthStateChanged(auth,u=>{user=u;render()});onSnapshot(query(collection(db,'polls'),orderBy('createdAt','desc')),s=>{polls=s.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.status==='published'&&Array.isArray(p.options)&&typeof p.expiresAt==='number');polls.forEach(listenVotes);msg('Firebase जुड़ गया। पोल और परिणाम लाइव अपडेट होंगे।');render()},e=>{console.error(e);msg('डेटा लोड नहीं हुआ: '+friendly(e),true);pollsEl.textContent='Firestore Rules जाँचें।'})}catch(e){console.error(e);msg('Firebase कनेक्शन नहीं बना: '+friendly(e),true)}}start();
-</script></body></html>
+:root{--green:#087443;--green2:#0b9658;--bg:#f3f8f4;--ink:#173328;--muted:#61736a;--line:#dce9e0;--white:#fff;--orange:#ff9933}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(120deg,#06623a,#11975a);color:white;padding:22px 16px 18px}
+.wrap{max-width:900px;margin:auto;padding:0 14px}header h1{margin:0;font-size:clamp(23px,5vw,34px)}header p{margin:5px 0 0;opacity:.95}
+.notice{background:#fff7e8;border:1px solid #ffe0a6;padding:10px 12px;border-radius:12px;margin:14px 0;font-size:13px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}button,.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--green);color:#fff}button.secondary{background:#e6f2ea;color:var(--green)}button:disabled{opacity:.55;cursor:not-allowed}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 3px 12px #1231}
+h2{font-size:20px;margin:0 0 12px}label{display:block;font-weight:650;margin:10px 0 5px}input,select,textarea{width:100%;border:1px solid #cbdacf;border-radius:10px;padding:11px;font:inherit;background:white;color:var(--ink)}textarea{min-height:78px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:10px}.muted{color:var(--muted);font-size:13px}.pill{display:inline-block;background:#e8f5ed;color:#08613a;border-radius:999px;padding:3px 9px;font-size:12px;margin:2px 4px 2px 0}.poll-title{font-size:18px;font-weight:750;margin:8px 0}.option{display:flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px;margin:7px 0;cursor:pointer}.option input{width:auto}.bar{height:8px;background:#e6eee8;border-radius:99px;overflow:hidden;margin-top:5px}.bar span{display:block;height:100%;background:var(--green2)}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row button{flex:1;min-width:115px}.status{margin:10px 0;font-size:14px}.empty{text-align:center;padding:25px;color:var(--muted)}footer{text-align:center;color:var(--muted);padding:25px 10px;font-size:12px}
+@media(max-width:560px){.grid,.filters{grid-template-columns:1fr}header{padding-top:18px}.card{padding:13px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>🇮🇳 JAN SAMARTH VOTE</h1><p>आपके क्षेत्र की आवाज़ • जनमत सर्वे • जनता की राय</p></div></header>
+<main class="wrap">
+<div class="notice">यह स्वतंत्र जनमत सर्वे प्लेटफ़ॉर्म है, आधिकारिक सरकारी मतदान या चुनाव प्रणाली नहीं। क्षेत्र चुनना केवल पोल का क्षेत्र बताता है—यह वोटर के निवास का सत्यापन नहीं है। कृपया निजी/संवेदनशील जानकारी न डालें।</div>
+<div id="status" class="status" role="status">कनेक्ट हो रहा है…</div>
+<nav><button id="showCreate">＋ पोल बनाएँ</button><button class="secondary" id="showAll">सभी पोल</button><button class="secondary" id="showTrending">🔥 Trending</button></nav>
+
+<section class="card" id="createCard">
+<h2>नया पोल बनाएँ</h2>
+<form id="createForm">
+<label for="question">पोल का सवाल</label><textarea id="question" required minlength="5" maxlength="240" placeholder="उदाहरण: हमारे क्षेत्र में सबसे ज़रूरी सुविधा कौन-सी है?"></textarea>
+<div class="grid"><div><label for="category">श्रेणी</label><select id="category"><option>स्थानीय विकास</option><option>शिक्षा</option><option>स्वास्थ्य</option><option>सड़क और परिवहन</option><option>पानी और सफाई</option><option>कृषि</option><option>मनोरंजन</option><option>अन्य</option></select></div><div><label for="duration">पोल की अवधि</label><select id="duration"><option value="1">1 दिन</option><option value="3">3 दिन</option><option value="7" selected>7 दिन</option><option value="30">30 दिन</option></select></div></div>
+<h3>क्षेत्र चुनें</h3><div class="grid"><div><label for="state">राज्य</label><input id="state" maxlength="80" placeholder="जैसे राजस्थान" required></div><div><label for="district">जिला</label><input id="district" maxlength="80" placeholder="जैसे जोधपुर" required></div><div><label for="subdistrict">तहसील / ब्लॉक</label><input id="subdistrict" maxlength="80" placeholder="वैकल्पिक"></div><div><label for="locality">गाँव / शहर / वार्ड</label><input id="locality" maxlength="100" placeholder="वैकल्पिक"></div></div>
+<label>विकल्प (कम-से-कम 2, अधिकतम 8)</label>
+<div id="optionsBox"><input class="pollOption" required maxlength="100" placeholder="विकल्प 1"><input class="pollOption" required maxlength="100" placeholder="विकल्प 2" style="margin-top:8px"></div>
+<div class="row"><button type="button" class="secondary" id="addOption">＋ विकल्प जोड़ें</button><button type="submit" id="createBtn">पोल प्रकाशित करें</button></div>
+<p class="muted">पोल सार्वजनिक होगा। सवाल और विकल्प स्पष्ट व सम्मानजनक रखें।</p>
+</form></section>
+
+<section class="card"><h2>पोल खोजें और क्षेत्र चुनें</h2>
+<label for="search">सवाल / विकल्प खोजें</label><input id="search" placeholder="जैसे सड़क, पानी, शिक्षा…">
+<div class="filters"><div><label for="filterState">राज्य</label><input id="filterState" placeholder="सभी राज्य"></div><div><label for="filterDistrict">जिला</label><input id="filterDistrict" placeholder="सभी जिले"></div></div>
+<div class="row"><button class="secondary" id="applyFilters">फ़िल्टर लागू करें</button><button class="secondary" id="clearFilters">फ़िल्टर हटाएँ</button></div>
+</section>
+<section id="polls"><div class="empty">पोल लोड हो रहे हैं…</div></section>
+</main>
+<footer>JAN SAMARTH VOTE • सार्वजनिक जनमत सर्वे • परिणामों को आधिकारिक जनमत न मानें</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, doc, setDoc, getDoc, onSnapshot, query, orderBy, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCOBDTB2jnRrWRw1IR_Hs5qinFd72-cZIU",
+  authDomain: "jan-samarth-vote-c6bd1.firebaseapp.com",
+  projectId: "jan-samarth-vote-c6bd1",
+  storageBucket: "jan-samarth-vote-c6bd1.firebasestorage.app",
+  messagingSenderId: "312185245742",
+  appId: "1:312185245742:web:a121c678434728311f4fbf"
+};
+const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
+const $=id=>document.getElementById(id);
+let currentUser=null, allPolls=[], voted=new Set(), mode='all';
+const status=(msg)=>$('status').textContent=msg;
+const norm=s=>(s||'').toLocaleLowerCase('hi').trim();
+function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function locationText(p){return [p.locality,p.subdistrict,p.district,p.state].filter(Boolean).join(', ');}
+$('showCreate').onclick=()=>$('createCard').scrollIntoView({behavior:'smooth'});
+$('showAll').onclick=()=>{mode='all';render()};
+$('showTrending').onclick=()=>{mode='trending';render()};
+$('addOption').onclick=()=>{const inputs=[...document.querySelectorAll('.pollOption')];if(inputs.length>=8)return alert('अधिकतम 8 विकल्प जोड़ सकते हैं।');const i=document.createElement('input');i.className='pollOption';i.maxLength=100;i.placeholder='विकल्प '+(inputs.length+1);i.style.marginTop='8px';i.required=true;$('optionsBox').appendChild(i)};
+$('applyFilters').onclick=render;
+$('clearFilters').onclick=()=>{$('search').value='';$('filterState').value='';$('filterDistrict').value='';mode='all';render()};
+$('search').addEventListener('input',render);
+$('createForm').addEventListener('submit',async e=>{
+ e.preventDefault(); if(!currentUser)return alert('कनेक्शन तैयार हो रहा है, कुछ सेकंड बाद कोशिश करें।');
+ const options=[...document.querySelectorAll('.pollOption')].map(x=>x.value.trim()).filter(Boolean);
+ if(options.length<2||options.length>8)return alert('2 से 8 सही विकल्प दर्ज करें।');
+ const question=$('question').value.trim(), state=$('state').value.trim(), district=$('district').value.trim();
+ if(question.length<5||!state||!district)return alert('सवाल, राज्य और जिला भरना ज़रूरी है।');
+ $('createBtn').disabled=true;
+ try{
+  const now=Date.now(), days=Number($('duration').value);
+  await addDoc(collection(db,'polls'),{question,category:$('category').value,options,state,district,subdistrict:$('subdistrict').value.trim(),locality:$('locality').value.trim(),createdAt:now,expiresAt:now+days*86400000,ownerUid:currentUser.uid,status:'published'});
+  $('createForm').reset();$('optionsBox').innerHTML='<input class="pollOption" required maxlength="100" placeholder="विकल्प 1"><input class="pollOption" required maxlength="100" placeholder="विकल्प 2" style="margin-top:8px">';
+  status('पोल प्रकाशित हो गया।');window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+ }catch(err){console.error(err);alert('पोल प्रकाशित नहीं हुआ: '+(err.code||err.message));}
+ finally{$('createBtn').disabled=false;}
+});
+onAuthStateChanged(auth,user=>{currentUser=user;if(user)status('कनेक्टेड • पोल बना सकते हैं और वोट दे सकते हैं।')});
+signInAnonymously(auth).catch(err=>{console.error(err);status('Login error: Firebase Console में Anonymous Authentication चालू करें।')});
+onSnapshot(query(collection(db,'polls'),orderBy('createdAt','desc')),snap=>{
+ allPolls=snap.docs.map(d=>({id:d.id,...d.data()}));render();
+},err=>{console.error(err);status('पोल लोड नहीं हुए: '+(err.code||err.message));$('polls').innerHTML='<div class="card">Firestore Rules या Firebase कनेक्शन जाँचें।</div>'});
+function render(){
+ const term=norm($('search').value), st=norm($('filterState').value), di=norm($('filterDistrict').value);
+ let list=allPolls.filter(p=>p.status==='published'&&(!term||norm([p.question,p.category,...(p.options||[]),p.state,p.district,p.locality].join(' ')).includes(term))&&(!st||norm(p.state).includes(st))&&(!di||norm(p.district).includes(di)));
+ if(mode==='trending')list.sort((a,b)=>(b._count||0)-(a._count||0));
+ if(!list.length){$('polls').innerHTML='<div class="card empty">इस खोज या क्षेत्र में कोई पोल नहीं मिला। आप नया पोल बना सकते हैं।</div>';return}
+ $('polls').innerHTML=list.map(p=>`<article class="card" data-id="${safe(p.id)}"><span class="pill">${safe(p.category||'अन्य')}</span><span class="pill">📍 ${safe(locationText(p)||'क्षेत्र नहीं दिया')}</span><div class="poll-title">${safe(p.question)}</div><div class="muted">${p.expiresAt&&Date.now()>p.expiresAt?'⏳ अवधि समाप्त':'🗳️ जनमत सर्वे'} • ${new Date(p.createdAt||Date.now()).toLocaleDateString('hi-IN')}</div><div class="choices">${(p.options||[]).map((o,i)=>`<label class="option"><input type="radio" name="vote-${safe(p.id)}" value="${i}"> <span>${safe(o)}</span></label>`).join('')}</div><div class="results" id="results-${safe(p.id)}"><span class="muted">रिजल्ट देखने के लिए वोट करें।</span></div><div class="row"><button data-vote="${safe(p.id)}" ${p.expiresAt&&Date.now()>p.expiresAt?'disabled':''}>वोट दें</button><button class="secondary" data-result="${safe(p.id)}">रिजल्ट देखें</button><button class="secondary" data-share="${safe(p.id)}">WhatsApp Share</button></div><div class="muted">वोट: <span id="total-${safe(p.id)}">…</span></div></article>`).join('');
+ list.forEach(p=>watchVotes(p));
+}
+const unsub={};
+function watchVotes(p){
+ if(unsub[p.id])return;
+ unsub[p.id]=onSnapshot(collection(db,'polls',p.id,'votes'),snap=>{
+  const counts=(p.options||[]).map(()=>0);
+  snap.forEach(d=>{const i=d.data().optionIndex;if(Number.isInteger(i)&&i>=0&&i<counts.length)counts[i]++});
+  p._count=snap.size;
+  const target=$('results-'+p.id);if(target){target.innerHTML=counts.map((n,i)=>`<div>${safe(p.options[i])} — ${n} (${snap.size?Math.round(n/snap.size*100):0}%)<div class="bar"><span style="width:${snap.size?n/snap.size*100:0}%"></span></div></div>`).join('')}
+  const total=$('total-'+p.id);if(total)total.textContent=snap.size;
+ },err=>console.error('votes read',err));
+}
+document.addEventListener('click',async e=>{
+ const v=e.target.closest('[data-vote]'),r=e.target.closest('[data-result]'),s=e.target.closest('[data-share]');
+ if(r){const p=allPolls.find(x=>x.id===r.dataset.result);if(p)watchVotes(p);return}
+ if(s){const p=allPolls.find(x=>x.id===s.dataset.share);if(!p)return;const url=location.href.split('#')[0]+'?poll='+encodeURIComponent(p.id);const text=`${p.question}\nक्षेत्र: ${locationText(p)}\nअपनी राय दें: ${url}`;window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank','noopener');return}
+ if(v){
+  const id=v.dataset.vote,p=allPolls.find(x=>x.id===id),selected=document.querySelector(`input[name="vote-${CSS.escape(id)}"]:checked`);
+  if(!currentUser)return alert('कनेक्शन तैयार नहीं है।');if(!selected)return alert('पहले एक विकल्प चुनें।');if(p.expiresAt&&Date.now()>p.expiresAt)return alert('इस पोल की अवधि समाप्त हो गई है।');
+  v.disabled=true;
+  try{const voteRef=doc(db,'polls',id,'votes',currentUser.uid);await runTransaction(db,async tx=>{const existing=await tx.get(voteRef);if(existing.exists())throw new Error('ALREADY_VOTED');tx.set(voteRef,{optionIndex:Number(selected.value),createdAt:Date.now()})});alert('आपका वोट दर्ज हो गया!');}
+  catch(err){alert(err.message==='ALREADY_VOTED'?'आप इस पोल में पहले ही वोट दे चुके हैं।':'वोट नहीं हुआ: '+(err.code||err.message));}
+  finally{v.disabled=false;}
+ }
+});
+</script>
+</body></html>
