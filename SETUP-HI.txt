@@ -1,0 +1,34 @@
+MOBILE SETUP — पूरा क्रम
+========================
+
+A. GitHub पर वेबसाइट डालना
+1. GitHub में jan-samarth-vote repository खोलें.
+2. Add file > Upload files दबाएँ.
+3. ZIP को पहले फोन के Downloads में extract करें (File Manager > ZIP > Extract).
+4. निकले हुए folder से index.html चुनकर GitHub पर upload करें. ध्यान रहे index.html repository के root में हो, किसी अंदर के folder में नहीं.
+5. Commit changes करें.
+6. Repository > Settings > Pages > Build and deployment: Deploy from a branch; Branch: main; Folder: /(root); Save.
+7. कुछ मिनट बाद Pages URL खोलें.
+
+B. Firebase प्रोजेक्ट
+1. https://console.firebase.google.com खोलें और Google account से sign in करें.
+2. Create a project > jan-samarth-vote नाम दें > Analytics optional है, शुरुआत में off रख सकते हैं > create.
+3. Project overview में </> Web icon > App nickname JAN SAMARTH VOTE > Register app.
+4. जो firebaseConfig code दिखे, उसमें apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId नोट/कॉपी करें.
+5. GitHub repository में index.html खोलें > pencil Edit दबाएँ. FIREBASE CONFIG खोजें. PASTE_FIREBASE_API_KEY आदि की जगह अपने config के वास्तविक मान डालें. Quotes बनाए रखें. Commit changes करें.
+6. Firebase Console > Build > Authentication > Get started > Sign-in method > Anonymous enable करें और Save.
+7. Build > Firestore Database > Create database > choose a location near your main audience if available; continue.
+8. Firestore > Rules tab में firebase/firestore.rules की पूरी सामग्री paste करें > Publish.
+9. Pages URL फिर से खोलें. Connection status में Connected दिखना चाहिए.
+
+C. Test
+- एक पोल बनाएं.
+- उसी ब्राउज़र में अलग पोल पर एक वोट दें.
+- दूसरा फोन/दूसरा browser profile खोलकर देखें कि पोल/परिणाम दिख रहे हैं.
+- अगर Permission denied आए, Authentication में Anonymous enabled है और Firestore Rules published हैं या नहीं जांचें.
+
+SECURITY NOTE
+Rules यहाँ starter level हैं. Public client-side polling में कोई तकनीकी रूप से वोट-count update को manipulate करने की कोशिश कर सकता है. बड़े public launch या विज्ञापन लगाने से पहले vote counting को trusted Cloud Function में ले जाना, App Check, moderation, privacy policy और backup लगाना चाहिए. यह official election voting नहीं है.
+
+FREE PLAN
+Firebase Spark plan से शुरुआत हो सकती है, लेकिन quota limits होती हैं. High traffic या extra services पर limits आ सकती हैं. Billing enable करने के लिए कोई card details न डालें जब तक खर्च और terms पूरी तरह समझ न लें.

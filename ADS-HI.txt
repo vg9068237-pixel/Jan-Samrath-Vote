@@ -1,0 +1,8 @@
+ADVERTISING PREPARATION
+=======================
+index.html में ये ad placeholders हैं:
+- id="ad-top"
+- id="ad-middle"
+- id="ad-bottom"
+
+जब ad network आपकी website approve कर दे, उस network के exact ad code को placeholder के अंदर डालें. अपनी ad clicks कभी न करें. Ads को vote buttons से अलग और साफ label के साथ रखें. पहले privacy/contact/about pages, useful original content, site navigation और network policy compliance तैयार करें. Approval या earnings guaranteed नहीं हैं.

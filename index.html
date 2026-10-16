@@ -1,80 +1,50 @@
-<!doctype html>
-<html lang="hi">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#123d83">
-  <meta name="description" content="Jan Samarth Vote — राजस्थान के चुनावों और सार्वजनिक मुद्दों पर अनौपचारिक जनमत सर्वे।">
-  <title>Jan Samarth Vote | जन समर्थन वोट</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header class="topbar">
-  <a class="brand" href="./" aria-label="Jan Samarth Vote home">
-    <span class="brand-mark">🗳️</span><span><b>जन समर्थन वोट</b><small>Jan Samarth Vote · आपकी राय, आपकी आवाज़</small></span>
-  </a>
-  <button id="menuBtn" class="menu-btn" aria-label="मेन्यू खोलें">☰</button>
-  <nav id="nav">
-    <a href="#home">होम / Home</a><a href="#polls">पोल / Polls</a><a href="#create">पोल बनाएँ / Create</a><a href="#about">हमारे बारे में / About</a>
-  </nav>
-</header>
-<main id="home">
-  <section class="hero">
-    <div class="hero-copy">
-      <span class="eyebrow">RAJASTHAN · PUBLIC OPINION</span>
-      <h1>आपकी राय,<br><em>लोकतंत्र की ताकत</em></h1>
-      <p>राजस्थान के चुनावों और स्थानीय मुद्दों पर अपनी राय साझा करें। पोल के नतीजे केवल वेबसाइट के पाठकों की राय दर्शाते हैं।</p>
-      <a class="button primary" href="#polls">पोल देखें / Explore polls</a>
-    </div>
-    <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="fort">🏛️</div><div class="vote-icon">☝️</div><div class="art-label">जनमत · Public Opinion</div></div>
-  </section>
+<!doctype html><html lang="hi"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#087443">
+<title>JAN SAMARTH VOTE | जनता की राय</title><meta name="description" content="गांव, शहर, सड़क, पानी, शिक्षा, रोजगार और सामाजिक मुद्दों पर पोल बनाएं, वोट दें और साझा परिणाम देखें।">
+<style>
+:root{--g:#087443;--d:#075b37;--bg:#f4f8f5;--line:#dce9e0;--ink:#18372a;--mut:#64756b}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Noto Sans Devanagari",Arial,sans-serif;color:var(--ink)}.wrap{max-width:1120px;margin:auto;padding:0 16px}header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}.nav{height:70px;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:10px;text-decoration:none}.logo{width:44px;height:44px;border-radius:13px;background:var(--g);color:white;display:grid;place-items:center;font-weight:900;font-size:21px}.brand b{display:block;color:var(--d);font-size:17px}.brand small{font-size:11px;color:var(--mut)}.btn{border:0;background:var(--g);color:#fff;padding:11px 15px;border-radius:11px;font-weight:800;cursor:pointer}.btn.alt{background:#e6f4eb;color:var(--d)}.btn.out{background:#fff;color:var(--g);border:1px solid #b9d8c5}.hero{background:linear-gradient(120deg,#075b37,#0d8a51);color:#fff;padding:42px 0}.hero h1{font-size:clamp(31px,5vw,48px);line-height:1.13;margin:15px 0}.hero p{line-height:1.8;color:#e5f4eb;max-width:720px}.badge{display:inline-block;border:1px solid #ffffff66;border-radius:30px;padding:6px 10px;font-size:12px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.hero .btn{background:#fff;color:var(--d)}.hero .btn.alt{background:#ffffff1c;color:#fff;border:1px solid #ffffff55}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px auto}.stat,.panel,.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 5px 18px #173d2409}.stat strong{display:block;color:var(--g);font-size:24px}.stat span{font-size:12px;color:var(--mut)}section{padding:22px 0}.head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:15px}.head h2{margin:0;font-size:25px}.head p{color:var(--mut);margin:5px 0 0;font-size:14px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.input,select,textarea{width:100%;padding:12px;border:1px solid #d2e1d7;border-radius:10px;background:#fff;font:inherit;color:var(--ink)}.toolbar .input{flex:1;min-width:180px}.toolbar select{width:auto;min-width:145px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.tag{background:#e8f6ed;color:var(--g);padding:5px 9px;border-radius:20px;font-size:11px;font-weight:800}.card h3{font-size:18px;line-height:1.4;margin:13px 0 7px}.muted{color:var(--mut);font-size:12px;line-height:1.6}.choice{display:flex;gap:8px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px;margin:7px 0;cursor:pointer}.choice input{accent-color:var(--g)}.bar{height:9px;border-radius:10px;background:#e8f0eb;overflow:hidden}.bar i{height:100%;display:block;background:var(--g)}.result{margin:10px 0}.resultTop{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}.cardActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.cardActions .btn{font-size:12px;padding:9px 11px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}.full{grid-column:1/-1}.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ad{margin:18px auto;min-height:68px;border:1px dashed #b6c9bd;border-radius:12px;background:#fff;display:grid;place-items:center;text-align:center;color:#839187;font-size:12px}.ad b{display:block;font-size:10px;letter-spacing:1px}.notice{padding:13px;background:#eaf7ef;border:1px solid #c9e5d3;border-radius:12px;font-size:13px;line-height:1.65}.warn{background:#fff6dc;color:#71571c;padding:12px;border-radius:10px;font-size:12px;line-height:1.6;margin-top:12px}.empty{text-align:center;padding:28px;border:1px dashed var(--line);border-radius:14px;background:#fff;color:var(--mut);grid-column:1/-1}footer{background:#103c2a;color:#dcece2;padding:28px 0;margin-top:20px}footer b{color:#fff}dialog{border:0;border-radius:16px;max-width:540px;width:calc(100% - 24px);padding:0}dialog::backdrop{background:#092416aa}.modalhead{background:#eaf7ef;padding:15px;display:flex;justify-content:space-between}.modalbody{padding:18px}.toast{display:none;position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#173d2b;color:white;padding:12px 16px;border-radius:10px;z-index:10;max-width:90%;font-size:13px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.nav{height:62px}.brand b{font-size:14px}.logo{width:38px;height:38px}.grid{grid-template-columns:1fr}.stats{gap:7px}.stat{padding:11px}.stat strong{font-size:19px}.head{align-items:start;flex-direction:column}.formgrid,.opts{grid-template-columns:1fr}.full{grid-column:auto}.hero{padding:32px 0}}
+</style></head><body>
+<header><div class="wrap nav"><a class="brand" href="#"><span class="logo">जन</span><span><b>JAN SAMARTH VOTE</b><small>जनता की राय • जनहित की बात</small></span></a><button class="btn" onclick="document.querySelector('#create').scrollIntoView({behavior:'smooth'})">＋ पोल बनाएं</button></div></header>
+<main><section class="hero"><div class="wrap"><span class="badge">RAJASTHAN • COMMUNITY OPINION PLATFORM</span><h1>आपकी राय,<br>बदलाव की शुरुआत।</h1><p>गांव, शहर और समाज से जुड़े मुद्दों पर पोल बनाएं, अपनी राय दें और लोगों की सामूहिक सोच को समझें। पोल लिंक WhatsApp पर शेयर करें।</p><div class="actions"><button class="btn" onclick="document.querySelector('#polls').scrollIntoView({behavior:'smooth'})">🗳️ पोल देखें</button><button class="btn alt" onclick="document.querySelector('#create').scrollIntoView({behavior:'smooth'})">अपना पोल बनाएं</button></div></div></section>
+<div class="wrap"><div class="ad" id="ad-top"><div><b>ADVERTISEMENT</b>भविष्य में स्वीकृत विज्ञापन कोड यहाँ लगाएं</div></div><div class="stats"><div class="stat"><strong id="pollCount">0</strong><span>कुल पोल</span></div><div class="stat"><strong id="voteCount">0</strong><span>कुल वोट</span></div><div class="stat"><strong id="connection">जांच जारी</strong><span>डेटाबेस स्थिति</span></div></div></div>
+<section class="wrap" id="polls"><div class="head"><div><h2>सार्वजनिक पोल</h2><p>वोट दें और साझा परिणाम देखें।</p></div><button class="btn alt" onclick="refresh()">↻ रिफ्रेश</button></div><div class="toolbar"><input class="input" id="search" placeholder="पोल खोजें…" oninput="render()"><select id="category" onchange="render()"><option value="">सभी श्रेणियां</option><option>गांव और पंचायत</option><option>सड़क और पानी</option><option>शिक्षा</option><option>रोजगार</option><option>स्वास्थ्य</option><option>समाज</option><option>अन्य</option></select></div><div class="grid" id="pollGrid"><div class="empty">डेटाबेस से कनेक्ट होने पर लाइव पोल यहाँ दिखेंगे।</div></div></section>
+<div class="wrap"><div class="ad" id="ad-middle"><div><b>ADVERTISEMENT</b>दूसरा विज्ञापन स्थान</div></div></div>
+<section class="wrap" id="create"><div class="head"><div><h2>नया पोल बनाएं</h2><p>सवाल और कम से कम दो विकल्प भरें।</p></div></div><div class="panel"><div class="notice">सार्वजनिक पोल बनाने के लिए पहले इस ब्राउज़र में गुमनाम Firebase पहचान बनाई जाएगी। असली साझा पोल के लिए नीचे दिए सेटअप में Firebase कॉन्फ़िगरेशन भरना जरूरी है।</div><form id="form" style="margin-top:16px"><div class="formgrid"><div class="field full"><label>पोल का सवाल *</label><input class="input" id="question" maxlength="180" required placeholder="आपके क्षेत्र में किस सुविधा की जरूरत है?"></div><div class="field"><label>श्रेणी</label><select class="input" id="cat"><option>गांव और पंचायत</option><option>सड़क और पानी</option><option>शिक्षा</option><option>रोजगार</option><option>स्वास्थ्य</option><option>समाज</option><option>अन्य</option></select></div><div class="field"><label>पोल कितने दिन चले?</label><select class="input" id="duration"><option value="7">7 दिन</option><option value="1">1 दिन</option><option value="3">3 दिन</option><option value="14">14 दिन</option><option value="30">30 दिन</option></select></div><div class="field full"><label>विकल्प (2 से 6) *</label><div class="opts" id="opts"><input class="input opt" required maxlength="80" placeholder="विकल्प 1"><input class="input opt" required maxlength="80" placeholder="विकल्प 2"><input class="input opt" maxlength="80" placeholder="विकल्प 3"><input class="input opt" maxlength="80" placeholder="विकल्प 4"></div><button type="button" class="btn out" style="margin-top:8px" onclick="addOption()">＋ विकल्प जोड़ें</button></div><div class="field full"><label>नाम (वैकल्पिक)</label><input class="input" id="creator" maxlength="60" placeholder="आपका नाम / समुदाय"></div><div class="field full"><label><input type="checkbox" required> मैं सभ्य और गैर-हानिकारक सवाल पोस्ट करने की पुष्टि करता/करती हूं।</label></div><div class="field full"><button class="btn" type="submit">पोल प्रकाशित करें</button><p class="muted">सार्वजनिक पोल बनाने के बाद लिंक शेयर करें। स्पैम रोकने के लिए मॉडरेशन जरूरी है।</p></div></div></form></div></section>
+<div class="wrap"><div class="ad" id="ad-bottom"><div><b>ADVERTISEMENT</b>तीसरा विज्ञापन स्थान</div></div><div class="warn">अस्वीकरण: यह अनौपचारिक जनमत मंच है, आधिकारिक सरकारी या चुनावी वोटिंग प्रणाली नहीं। इसमें डाले गए वोट किसी वास्तविक चुनाव में मान्य नहीं हैं। निजी जानकारी जैसे आधार नंबर या फोन नंबर न डालें।</div></div></main>
+<footer><div class="wrap"><b>JAN SAMARTH VOTE</b><p style="line-height:1.7;font-size:13px">जनता की राय • जनहित की बात<br>संपर्क ईमेल: यहाँ अपनी आधिकारिक ईमेल जोड़ें।</p><small>© <span id="year"></span> JAN SAMARTH VOTE</small></div></footer>
+<dialog id="modal"><div class="modalhead"><b>पोल के परिणाम</b><button onclick="modal.close()" style="border:0;background:none;font-size:22px">×</button></div><div class="modalbody" id="modalbody"></div></dialog><div class="toast" id="toast"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, doc, runTransaction, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  <section class="quick-links" aria-label="मुख्य सुविधाएँ">
-    <a href="#polls"><span>📊</span><b>ताज़ा पोल</b><small>Latest polls</small></a>
-    <a href="#create"><span>✍️</span><b>पोल बनाएँ</b><small>Create a poll</small></a>
-    <a href="#about"><span>ℹ️</span><b>वोटर गाइड</b><small>Voter information</small></a>
-  </section>
-
-  <section id="polls" class="section">
-    <div class="section-head"><div><span class="eyebrow">HAVE YOUR SAY</span><h2>जनमत पोल <span>/ Public polls</span></h2></div>
-      <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="पोल खोजें / Search polls"></label>
-    </div>
-    <div class="notice"><strong>ध्यान दें / Please note:</strong> ये अनौपचारिक जनमत सर्वे हैं। परिणाम आधिकारिक चुनाव परिणाम, एग्जिट पोल या वैज्ञानिक रूप से प्रतिनिधि सर्वे नहीं हैं। / These are informal opinion polls, not official election results or representative surveys.</div>
-    <div id="pollGrid" class="poll-grid"></div>
-  </section>
-
-  <section id="create" class="section create-section">
-    <div class="section-head"><div><span class="eyebrow">YOUR QUESTION, YOUR POLL</span><h2>नया पोल बनाएँ <span>/ Create a poll</span></h2></div></div>
-    <div class="create-card">
-      <p class="muted">इस शुरुआती संस्करण में नया पोल इसी ब्राउज़र में डेमो के रूप में सेव होगा। सभी उपयोगकर्ताओं के बीच पोल साझा करने के लिए नीचे दिए गए Supabase सेटअप की जरूरत है।</p>
-      <form id="createForm">
-        <label>पोल का सवाल / Poll question<input id="pollQuestion" required maxlength="140" placeholder="उदाहरण: आपके क्षेत्र की सबसे बड़ी प्राथमिकता क्या है?"></label>
-        <label>श्रेणी / Category<select id="pollCategory"><option>राजस्थान / Rajasthan</option><option>स्थानीय मुद्दे / Local issues</option><option>जनमत / Public opinion</option></select></label>
-        <label>विकल्प / Options <small>(कम से कम 2, अधिकतम 6)</small>
-          <input class="poll-option" required maxlength="80" placeholder="विकल्प 1">
-          <input class="poll-option" required maxlength="80" placeholder="विकल्प 2">
-          <input class="poll-option" maxlength="80" placeholder="विकल्प 3 (वैकल्पिक)">
-          <input class="poll-option" maxlength="80" placeholder="विकल्प 4 (वैकल्पिक)">
-          <input class="poll-option" maxlength="80" placeholder="विकल्प 5 (वैकल्पिक)">
-          <input class="poll-option" maxlength="80" placeholder="विकल्प 6 (वैकल्पिक)">
-        </label>
-        <button class="button primary" type="submit">पोल बनाएँ / Create poll</button>
-        <p id="createMessage" class="form-message" role="status"></p>
-      </form>
-    </div>
-  </section>
-
-  <section id="about" class="section about-grid">
-    <div><span class="eyebrow">ABOUT THIS SITE</span><h2>जन समर्थन वोट क्या है?</h2><p>Jan Samarth Vote एक स्वतंत्र जनमत-पोल वेबसाइट का प्रारूप है। इसका भारत निर्वाचन आयोग या राजस्थान राज्य निर्वाचन आयोग से कोई आधिकारिक संबंध नहीं है।</p></div>
-    <div class="about-box"><h3>जिम्मेदार भागीदारी</h3><p>उम्मीदवारों या दलों के बारे में अपुष्ट आरोप न डालें। किसी भी सर्वे को आधिकारिक मतदान न समझें। चुनाव की तारीखों और नतीजों के लिए आधिकारिक स्रोत देखें।</p><a href="https://election.rajasthan.gov.in/" target="_blank" rel="noopener">राजस्थान निर्वाचन विभाग ↗</a><br><a href="https://www.eci.gov.in/" target="_blank" rel="noopener">भारत निर्वाचन आयोग ↗</a></div>
-  </section>
-</main>
-<footer><a class="footer-brand" href="./">🗳️ Jan Samarth Vote</a><p>स्वतंत्र जनमत मंच · Independent opinion platform</p><p>यह वेबसाइट आधिकारिक सरकारी मतदान सेवा नहीं है। / Not an official election service.</p><small>© <span id="year"></span> Jan Samarth Vote</small></footer>
-
-<dialog id="voteDialog">
-  <form method="dialog" class="dialog-head"><div><span class="eyebrow">CAST YOUR OPINION</span><h2 id="dialogQuestion">पोल</h2></div><button class="close-btn" aria-label="बंद करें">×</button></form>
-  <div id="dialogBody"></div>
-</dialog>
-<script src="app.js"></script>
-</body>
-</html>
+// FIREBASE CONFIG: Firebase Console > Project settings > Your apps > Web app.
+// Replace the placeholder values below before publishing a live version.
+const firebaseConfig = {
+  apiKey: "PASTE_FIREBASE_API_KEY",
+  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
+  projectId: "PASTE_PROJECT_ID",
+  storageBucket: "PASTE_PROJECT_ID.appspot.com",
+  messagingSenderId: "PASTE_MESSAGING_SENDER_ID",
+  appId: "PASTE_FIREBASE_APP_ID"
+};
+const configured = !Object.values(firebaseConfig).some(v=>v.startsWith("PASTE_"));
+let app,auth,db,uid=null,polls=[],unsubscribe=null;
+const localVotesKey='jsv_firebase_voted_v1';
+const $=s=>document.querySelector(s);
+function toast(t){$('#toast').textContent=t;$('#toast').style.display='block';setTimeout(()=>$('#toast').style.display='none',3500)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function left(t){return Math.max(0,Math.ceil((Number(t)-Date.now())/86400000))}
+function total(p){return p.totalVotes||0}
+function render(){const q=($('#search').value||'').toLowerCase(),cat=$('#category').value;let a=polls.filter(p=>(p.question||'').toLowerCase().includes(q)|| (p.category||'').toLowerCase().includes(q)).filter(p=>!cat||p.category===cat);$('#pollCount').textContent=polls.length;$('#voteCount').textContent=polls.reduce((n,p)=>n+total(p),0);const box=$('#pollGrid');if(!a.length){box.innerHTML='<div class="empty">अभी कोई पोल नहीं है। सबसे पहला पोल आप बनाएं।</div>';return}box.innerHTML=a.map(p=>{const opts=p.options||[],votes=p.voteCounts||[],voted=!!(uid&&localStorage.getItem(localVotesKey+':'+p.id+':'+uid)),closed=Number(p.expiresAt||0)<Date.now();return `<article class="card"><span class="tag">${esc(p.category||'अन्य')}</span><h3>${esc(p.question)}</h3><p class="muted">द्वारा: ${esc(p.creator||'समुदाय')}</p><div class="muted">📊 ${total(p)} प्रतिक्रियाएं · ${closed?'अवधि पूरी':left(p.expiresAt)+' दिन बाकी'}</div><div>${opts.map((o,i)=>`<label class="choice"><input type="radio" name="v-${p.id}" value="${i}" ${voted||closed?'disabled':''}><span>${esc(o)}</span></label>`).join('')}</div><div class="cardActions">${!voted&&!closed?`<button class="btn" onclick="window.castVote('${p.id}')">वोट दें</button>`:''}<button class="btn alt" onclick="window.results('${p.id}')">परिणाम देखें</button><button class="btn out" onclick="window.share('${p.id}')">शेयर करें</button></div></article>`}).join('')}
+window.results=id=>{const p=polls.find(x=>x.id===id);if(!p)return;let n=total(p);$('#modalbody').innerHTML=`<h3>${esc(p.question)}</h3><p class="muted">${n} कुल वोट</p>${p.options.map((o,i)=>{let c=(p.voteCounts||[])[i]||0,pc=n?Math.round(c*100/n):0;return `<div class="result"><div class="resultTop"><span>${esc(o)}</span><b>${pc}% (${c})</b></div><div class="bar"><i style="width:${pc}%"></i></div></div>`}).join('')}`;$('#modal').showModal()};
+window.share=id=>{let p=polls.find(x=>x.id===id),url=location.href.split('#')[0]+'#polls',txt=`JAN SAMARTH VOTE पर अपनी राय दें:\n${p?.question||''}\n${url}`;if(navigator.share)navigator.share({title:'JAN SAMARTH VOTE',text:txt,url}).catch(()=>{});else navigator.clipboard?.writeText(txt).then(()=>toast('लिंक कॉपी हो गया।')).catch(()=>prompt('लिंक कॉपी करें',txt))};
+window.castVote=async id=>{if(!uid){toast('पहचान बन रही है, थोड़ी देर बाद कोशिश करें।');return}const p=polls.find(x=>x.id===id),sel=document.querySelector(`input[name="v-${id}"]:checked`);if(!p||!sel){toast('पहले विकल्प चुनें।');return}const ref=doc(db,'polls',id),voteRef=doc(db,'polls',id,'votes',uid);try{await runTransaction(db,async tx=>{const ps=await tx.get(ref);if(!ps.exists())throw Error('यह पोल उपलब्ध नहीं है');const data=ps.data();if(Date.now()>Number(data.expiresAt))throw Error('इस पोल की अवधि पूरी हो गई है');const old=await tx.get(voteRef);if(old.exists())throw Error('आप इस ब्राउज़र/पहचान से पहले वोट दे चुके हैं');tx.set(voteRef,{optionIndex:Number(sel.value),createdAt:Date.now()});let counts=[...(data.voteCounts||[])];counts[Number(sel.value)]=(counts[Number(sel.value)]||0)+1;tx.update(ref,{voteCounts:counts,totalVotes:(data.totalVotes||0)+1})});localStorage.setItem(localVotesKey+':'+id+':'+uid,'1');toast('आपका वोट दर्ज हो गया!')}catch(e){toast(e.message||'वोट दर्ज नहीं हो सका।')}};
+window.addOption=()=>{const b=$('#opts');if(b.querySelectorAll('.opt').length>=6){toast('अधिकतम 6 विकल्प');return}let i=b.querySelectorAll('.opt').length+1,e=document.createElement('input');e.className='input opt';e.maxLength=80;e.placeholder='विकल्प '+i;b.append(e)};
+$('#form').addEventListener('submit',async e=>{e.preventDefault();if(!db||!uid){toast('पहले Firebase कनेक्शन सेटअप करें।');return}const options=[...document.querySelectorAll('.opt')].map(x=>x.value.trim()).filter(Boolean);if(options.length<2){toast('कम से कम 2 विकल्प भरें।');return}const now=Date.now();try{await addDoc(collection(db,'polls'),{question:$('#question').value.trim(),category:$('#cat').value,options,createdAt:now,expiresAt:now+Number($('#duration').value)*86400000,creator:$('#creator').value.trim()||'समुदाय',ownerUid:uid,status:'published',voteCounts:options.map(()=>0),totalVotes:0});e.target.reset();$('#opts').innerHTML='<input class="input opt" required maxlength="80" placeholder="विकल्प 1"><input class="input opt" required maxlength="80" placeholder="विकल्प 2"><input class="input opt" maxlength="80" placeholder="विकल्प 3"><input class="input opt" maxlength="80" placeholder="विकल्प 4">';toast('पोल प्रकाशित हो गया!');}catch(err){toast('पोल प्रकाशित नहीं हुआ: '+(err.message||'Rules जांचें'))}});
+window.refresh=()=>{if(db)loadLive();else toast('Firebase सेटअप बाकी है।')};
+function loadLive(){if(unsubscribe)unsubscribe();unsubscribe=onSnapshot(query(collection(db,'polls'),orderBy('createdAt','desc')),snap=>{polls=snap.docs.map(d=>({id:d.id,...d.data()}));render();$('#connection').textContent='कनेक्टेड'},err=>{console.error(err);$('#connection').textContent='नियम जांचें';toast('डेटाबेस पढ़ने में समस्या। Firestore Rules जांचें।')})}
+$('#search').addEventListener('input',render);$('#category').addEventListener('change',render);$('#year').textContent=new Date().getFullYear();
+if(configured){try{app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);$('#connection').textContent='कनेक्ट हो रहा';onAuthStateChanged(auth,user=>{if(user){uid=user.uid;loadLive()}else signInAnonymously(auth).catch(e=>{console.error(e);$('#connection').textContent='लॉगिन त्रुटि';toast('Authentication में Anonymous sign-in चालू करें।')})})}catch(e){console.error(e);$('#connection').textContent='कॉन्फ़िग त्रुटि'}}else{$('#connection').textContent='सेटअप बाकी';$('#pollGrid').innerHTML='<div class="empty">वेबसाइट तैयार है, लेकिन लाइव वोटिंग चालू करने के लिए Firebase कॉन्फ़िगरेशन भरना और Firestore Rules प्रकाशित करना बाकी है। निर्देश ZIP में हैं।</div>'}
+</script></body></html>
